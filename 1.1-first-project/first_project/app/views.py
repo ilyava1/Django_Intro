@@ -1,8 +1,9 @@
 from django.http import HttpResponse
 from django.shortcuts import render, reverse
-from os import listdir
-from os.path import isfile
+from os import listdir, curdir
+from os.path import isfile, abspath
 from datetime import datetime
+from pprint import pprint
 
 
 def home_view(request):
@@ -55,3 +56,23 @@ def workdir_view(request):
                 Dirs += '; ' + str(f)
     msg += Dirs + Files
     return HttpResponse(msg)
+
+
+def workdir_view_2(request):
+    template_name = 'app/workdir.html'
+    # по аналогии с `time_view`, напишите код,
+    # который возвращает список файлов в рабочей
+    # директории
+
+    content = {}
+    content['files'] = []
+    content['dirs'] = []
+    for f in listdir():
+        if isfile(f):
+            content['files'].append(f)
+        else:
+            content['dirs'].append(f)
+    dir_path = abspath(curdir)
+    content['dir_path'] = dir_path
+    context = content
+    return render(request, template_name, context)

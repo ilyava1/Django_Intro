@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Содержание рабочей папки</title>
+</head>
+<body>
+    <h3> Содержание рабочей папки </h3>
+    <h5>{{ dir_path }}</h5>
+    <h4> Вложенные папки: </h4>
+    {% for name in dirs %}
+    <li>{{ name }}</li>
+    {% endfor %}
+    <h4> Файлы: </h4>
+    {% for name in files %}
+    <li>{{ name }}</li>
+    {% endfor %}
+</body>
+</html>
