@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Автобусные остановки г. Москвы</title>
+</head>
+<body>
+{% if page.has_previous %}
+    <a href="?page={{ page.previous_page_number }}"> << Назад </a>
+{% endif %}
+-- Cтраница {{ page.number }} из {{ page_qua }} --
+{% if page.has_next %}
+    <a href="?page={{ page.next_page_number }}"> Вперед >> </a>
+{% endif %}
+
+{% for bus_stop in page %}
+<h4>Остановка:</h4>
+    {% for el in bus_stop %}
+        <li>{{ el }}</li>
+    {% endfor %}
+{% endfor %}
+<h3> </h3>
+{% if page.has_previous %}
+    <a href="?page={{ page.previous_page_number }}"> << Назад </a>
+{% endif %}
+-- Cтраница {{ page.number }} из {{ page_qua }} --
+{% if page.has_next %}
+    <a href="?page={{ page.next_page_number }}"> Вперед >> </a>
+{% endif %}
+</body>
+</html>

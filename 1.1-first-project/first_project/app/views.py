@@ -7,6 +7,12 @@ from pprint import pprint
 
 
 def home_view(request):
+    """
+    Функция формирования контекста для заглавной страницы
+
+    :param request:
+    :return:
+    """
     template_name = 'app/home.html'
 
     pages = {
@@ -14,9 +20,7 @@ def home_view(request):
         'Показать текущее время': reverse('time'),
         'Показать содержимое рабочей директории': reverse('workdir')
     }
-    
-    # context и параметры render менять не нужно
-    # подбробнее о них мы поговорим на следующих лекциях
+
     context = {
         'pages': pages
     }
@@ -24,46 +28,22 @@ def home_view(request):
 
 
 def time_view(request):
-    # обратите внимание – здесь HTML шаблона нет, 
-    # возвращается просто текст
+    """
+    Функция формирования HTTP-ответа содержащего указание текущего времени
+    """
     current_time = datetime.now().strftime("%H:%M:%S")
     msg = f'Текущее время: {current_time}'
     return HttpResponse(msg)
 
+def make_dir_content()->dict:
+    """
+    Функция формирования словаря с содержанием рабочей папки
 
-def workdir_view(request):
-    # по аналогии с `time_view`, напишите код,
-    # который возвращает список файлов в рабочей
-    # директории
+    Словарь формируется из списка файлов, списка директорий и
+    абсолютного пути до рабочей папки
 
-    fl = 0
-    dir = 0
-    msg = 'Содержание рабочей директории. '
-    Files = ''
-    Dirs = ''
-    for f in listdir():
-        if isfile(f):
-            if fl == 0:
-                Files += ' Файлы: ' + str(f)
-                fl = 1
-            else:
-                Files += '; ' + str(f)
-        else:
-            if dir == 0:
-                Dirs += 'Папки: ' + str(f)
-                dir = 1
-            else:
-                Dirs += '; ' + str(f)
-    msg += Dirs + Files
-    return HttpResponse(msg)
-
-
-def workdir_view_2(request):
-    template_name = 'app/workdir.html'
-    # по аналогии с `time_view`, напишите код,
-    # который возвращает список файлов в рабочей
-    # директории
-
+    :return:
+    """
     content = {}
     content['files'] = []
     content['dirs'] = []
@@ -74,5 +54,17 @@ def workdir_view_2(request):
             content['dirs'].append(f)
     dir_path = abspath(curdir)
     content['dir_path'] = dir_path
+    return content
+
+def workdir_view(request):
+    """
+    Функция формирования контекста для страницы, выводящей содержание
+    рабочей папки
+
+    :param request:
+    :return:
+    """
+    template_name = 'app/workdir.html'
+    content = make_dir_content()
     context = content
     return render(request, template_name, context)
